@@ -8,12 +8,23 @@
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
-# OC（提升主频，可选
+# OC 提升主频
 #cp -f ../PATCH/new/main/999-unlock-1608mhz-rk3328.patch ./target/linux/rockchip/patches-5.4/999-unlock-1608mhz-rk3328.patch
 
-# SWAP LAN WAN（满足千兆场景，可选
+# SWAP LAN WAN 网口对调
 #sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 #sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+
+# 移除 footer.htm 底部文字
+sed -i '/<a class=\"luci-link\" href=\"https:\/\/github.com\/openwrt\/luci\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
+sed -i '/<a href=\"https:\/\/github.com\/jerrykuku\/luci-theme-argon\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
+sed -i '/<%= ver.distversion %>/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
+
+# 移除 footer_login.htm 底部文字
+sed -i '/<a class=\"luci-link\" href=\"https:\/\/github.com\/openwrt\/luci\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i '/<a href=\"https:\/\/github.com\/jerrykuku\/luci-theme-argon\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i '/<%= ver.distversion %>/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+#sed -i '/<a href=\"https:\/\/github.com\/openwrt\/luci\">/d' feeds/luci/themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/footer.htm
 
 # Add luci-app-ssr-plus
 pushd package/lean
@@ -52,7 +63,7 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
-git clone --depth=1 https://github.com/SuLingGG/luci-app-adguardhome
+svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome
 
 # Add luci-app-diskman
 git clone --depth=1 https://github.com/SuLingGG/luci-app-diskman
@@ -71,10 +82,6 @@ git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 rm -rf ../lean/luci-theme-argon
-
-# Use immortalwrt's luci-app-netdata
-rm -rf ../lean/luci-app-netdata
-svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ntlf9t/luci-app-netdata
 
 # Add tmate
 git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
@@ -101,12 +108,6 @@ git clone --depth=1 https://github.com/NateLol/luci-app-oled
 # Add driver for rtl8821cu & rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
-popd
-
-# Add netdata
-pushd feeds/packages/admin
-rm -rf netdata
-svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 popd
 
 # Mod zzz-default-settings
@@ -147,3 +148,12 @@ popd
 
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
+
+# Custom configs
+#git am $GITHUB_WORKSPACE/patches/lean/*.patch
+echo -e " Lean's OpenWrt built on "$(date +%Y.%m.%d)"\n -----------------------------------------------------" >> package/base-files/files/etc/banner
+
+#Add CUPInfo
+pushd package/lean/autocore/files/arm/sbin
+cp -f $GITHUB_WORKSPACE/scripts/cpuinfo cpuinfo
+popd
