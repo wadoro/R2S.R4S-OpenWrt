@@ -242,7 +242,7 @@ jobs:
           echo "::set-output name=release_tag::$(date +"%Y.%m.%d")-Lean"
           echo "::set-output name=release_date::$(date +"%Y.%m.%d")"
           touch release.txt
-          [ $UPLOAD_WETRANSFER = true ] && echo "$(date +"%Y.%m.%d %H:%M:%S" )" >> release.txt
+          [ $UPLOAD_RELEASE = true ] && echo "$(date +"%Y.%m.%d %H:%M:%S" )" >> release.txt
           echo "::set-output name=status::success"
 
       - name: Upload firmware to release
