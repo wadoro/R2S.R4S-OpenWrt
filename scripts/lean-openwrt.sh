@@ -15,20 +15,6 @@ sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generat
 #sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 #sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 
-# 主题
-rm -fr package/new/luci-theme-argon
-git clone -b master --single-branch https://github.com/jerrykuku/luci-theme-argon package/new/luci-theme-argon
-
-# 移除 footer.htm 底部文字
-sed -i '/<a class=\"luci-link\" href=\"https:\/\/github.com\/openwrt\/luci\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
-sed -i '/<a href=\"https:\/\/github.com\/jerrykuku\/luci-theme-argon\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
-sed -i '/<%= ver.distversion %>/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer.htm
-
-# 移除 footer_login.htm 底部文字
-sed -i '/<a class=\"luci-link\" href=\"https:\/\/github.com\/openwrt\/luci\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
-sed -i '/<a href=\"https:\/\/github.com\/jerrykuku\/luci-theme-argon\">/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
-sed -i '/<%= ver.distversion %>/d' package/new/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
-
 # Add luci-app-ssr-plus
 pushd package/lean
 git clone --depth=1 https://github.com/fw876/helloworld
